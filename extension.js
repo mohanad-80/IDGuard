@@ -1,66 +1,64 @@
 const vscode = require("vscode");
-const cheerio = require("cheerio");
+const HTMLParser = require("node-html-parser");
 
-let ids = [];
+let duplicatedIds = [];
 let timeout;
 const diagnosticCollection =
   vscode.languages.createDiagnosticCollection("html");
 
 function monitorHTMLFile(e) {
   if (e.document.languageId === "html") {
-    clearTimeout(timeout); // Clear previous timeout
+    clearTimeout(timeout);
     timeout = setTimeout(() => {
-      ids = []; // Clear the array of IDs before processing
+      duplicatedIds = [];
 
       // get the html content as text
       const content = e.document.getText();
-      //////////////////////// console.log(e);
 
-      // parse the text to html
-      const $ = cheerio.load(content);
+      const root = HTMLParser.parse(content);
 
-      // array of all elements with id attribute
-      const elementsWithId = $("[id]").get();
+      const elementsWithId = root.querySelectorAll("[id]");
 
-      // regular expression for the id attribute
       const idRegex = /id[ ]?=[ ]?["']([^"']+)["']/gi;
 
       let diagnostics = [];
       elementsWithId.forEach((el) => {
-        const id = el.attribs.id;
-        if (ids.includes(id)) {
-          vscode.window.activeTextEditor.edit((editBuilder) => {
-            let match;
-            let idsRanges = [];
+        const elementId = el.id;
+        const elementsWithTheSameId = root.querySelectorAll(
+          `[id=${elementId}]`
+        );
 
-            // Search the document for id attributes with regex
-            while ((match = idRegex.exec(content)) !== null) {
-              const idFromRegEx = match[1];
-              if (idFromRegEx === id) {
-                // create the range of the position of the id
-                const start = match.index + match[0].indexOf(id);
-                const startPos = e.document.positionAt(start);
-                const endPos = e.document.positionAt(start + id.length);
+        if (
+          elementsWithTheSameId.length > 1 &&
+          !duplicatedIds.includes(elementId)
+        ) {
+          let idRanges = [];
+          duplicatedIds.push(elementId);
 
-                const range = new vscode.Range(startPos, endPos);
-                idsRanges.push(range);
-              }
+          elementsWithTheSameId.forEach((element) => {
+            const elementRange = element.range;
+            idRegex.lastIndex = elementRange[0];
+            let match = idRegex.exec(content);
+
+            if (match) {
+              // create the range of the position of the id
+              const start = match.index + match[0].indexOf(elementId);
+              const startPos = e.document.positionAt(start);
+              const endPos = e.document.positionAt(start + elementId.length);
+
+              const range = new vscode.Range(startPos, endPos);
+              idRanges.push(range);
             }
-            idRegex.lastIndex = 0; // Reset the lastIndex property
-
-            // loop through the ranges and create a new diagnostic for each one
-            idsRanges.forEach((range) => {
-              const diagnostic = new vscode.Diagnostic(
-                range,
-                `Duplicate id attribute detected: ${id}`,
-                vscode.DiagnosticSeverity.Information // <=== choose the best severity
-              );
-              diagnostics.push(diagnostic);
-            });
           });
-        } else {
-          // if the id is not in the ids array then add it
-          ids.push(id);
+
+          idRanges.forEach((range) => {
+            const diagnostic = new vscode.Diagnostic(
+              range,
+              `Duplicate id attribute detected: ${elementId}`,
+              vscode.DiagnosticSeverity.Information // <=== choose the best severity
+            );
+            diagnostics.push(diagnostic);
+          });
         }
       });
 

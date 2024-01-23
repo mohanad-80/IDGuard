@@ -14,8 +14,7 @@
   ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [
-    ]
+    "commands": []
   },
   "scripts": {
     "lint": "eslint .",
@@ -33,7 +32,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
-    "dom-parser": "^1.1.5"
+    "dom-parser": "^1.1.5",
+    "node-html-parser": "^6.1.12"
   }
 }
