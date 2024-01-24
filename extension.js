@@ -32,7 +32,6 @@ function monitorHTMLFile(e) {
           elementsWithTheSameId.length > 1 &&
           !duplicatedIds.includes(elementId)
         ) {
-          let idRanges = [];
           duplicatedIds.push(elementId);
 
           elementsWithTheSameId.forEach((element) => {
@@ -47,17 +46,14 @@ function monitorHTMLFile(e) {
               const endPos = e.document.positionAt(start + elementId.length);
 
               const range = new vscode.Range(startPos, endPos);
-              idRanges.push(range);
-            }
-          });
 
-          idRanges.forEach((range) => {
-            const diagnostic = new vscode.Diagnostic(
-              range,
-              `Duplicate id attribute detected: ${elementId}`,
-              vscode.DiagnosticSeverity.Information // <=== choose the best severity
-            );
-            diagnostics.push(diagnostic);
+              const diagnostic = new vscode.Diagnostic(
+                range,
+                `Duplicate id attribute detected: ${elementId}`,
+                vscode.DiagnosticSeverity.Information // <=== choose the best severity
+              );
+              diagnostics.push(diagnostic);
+            }
           });
         }
       });
