@@ -24,6 +24,10 @@ no requirements
 
 Initial release of **IDGuard**
 
+### 1.2.0
+
+fix some bugs
+
 ---
 
 **Enjoy!**
