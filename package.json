@@ -1,8 +1,9 @@
 {
-  "name": "one-id",
-  "displayName": "One Id",
+  "name": "idguard",
+  "displayName": "IDGuard",
   "description": "Ensure unique id effortlessly with One Id",
   "version": "0.0.1",
+  "icon": "./images/IDGuard-icon.png",
   "engines": {
     "vscode": "^1.84.0"
   },
@@ -32,7 +33,6 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "dom-parser": "^1.1.5",
     "node-html-parser": "^6.1.12"
   }
 }
