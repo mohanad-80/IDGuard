@@ -1,9 +1,17 @@
 {
   "name": "idguard",
   "displayName": "IDGuard",
+  "publisher": "Mohanad Ahmed",
   "description": "Ensure unique id effortlessly with One Id",
-  "version": "0.0.1",
-  "icon": "./images/IDGuard-icon.png",
+  "version": "1.0.0",
+  "author": {
+    "name": "Mohanad Ahmed"
+  },
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git", 
+    "url": "https://github.com/mohanad-80/IDGaurd"
+  },
   "engines": {
     "vscode": "^1.84.0"
   },
