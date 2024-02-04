@@ -12,7 +12,7 @@ Ensure your HTML documents are free from duplicate IDs with the extension's real
 
 Receive on-the-fly warnings by simply hovering over elements with duplicate IDs. This intuitive feature helps you identify and address issues without interrupting your workflow.
 
-![preview](https://github.com/mohanad-80/IDGaurd/blob/master/images/Extension-preview.gif?raw=true)
+![preview](https://github.com/mohanad-80/IDGuard/blob/master/images/Extension-preview.gif?raw=true)
 
 ## Requirements
 
