@@ -49,7 +49,7 @@ function monitorHTMLFile(e) {
 
               const diagnostic = new vscode.Diagnostic(
                 range,
-                `Duplicate id attribute detected: ${elementId}`,
+                `Duplicate ID detected: "${elementId}". Consider using unique IDs to avoid conflicts.`,
                 vscode.DiagnosticSeverity.Information // <=== choose the best severity
               );
               diagnostics.push(diagnostic);

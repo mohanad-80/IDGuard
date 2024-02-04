@@ -1,6 +1,6 @@
-# one-id README
+# IDGaurd
 
-This is the README for your extension "one-id". After writing up a brief description, we recommend including the following sections.
+Instantly catch and warn about duplicate HTML IDs in real-time as you code, ensuring clean and error-free HTML documents.
 
 ## Features
 
