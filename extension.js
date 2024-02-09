@@ -1,6 +1,7 @@
 const vscode = require("vscode");
 const HTMLParser = require("node-html-parser");
 
+let isExtensionEnabled = true;
 let duplicatedIds = [];
 let timeout;
 const diagnosticCollection =
@@ -66,22 +67,48 @@ function monitorHTMLFile(e) {
   }
 }
 
+const enableCommandDisposable = vscode.commands.registerCommand(
+  "extension.enable",
+  () => {
+    isExtensionEnabled = true;
+    vscode.window.showInformationMessage("Extension enabled!");
+  }
+);
+
+const disableCommandDisposable = vscode.commands.registerCommand(
+  "extension.disable",
+  () => {
+    diagnosticCollection.clear();
+    isExtensionEnabled = false;
+    vscode.window.showInformationMessage("Extension disabled!");
+  }
+);
+
 function activate() {
   vscode.workspace.onDidChangeTextDocument((e) => {
-    monitorHTMLFile(e);
+    if (isExtensionEnabled) {
+      monitorHTMLFile(e);
+    }
   });
 
   vscode.window.onDidChangeActiveTextEditor((e) => {
-    monitorHTMLFile(e);
+    if (isExtensionEnabled) {
+      monitorHTMLFile(e);
+    }
   });
 
   vscode.workspace.onDidChangeWorkspaceFolders((e) => {
-    monitorHTMLFile(e);
+    if (isExtensionEnabled) {
+      monitorHTMLFile(e);
+    }
   });
 }
 
 // This method is called the extension is deactivated
-function deactivate() {}
+function deactivate() {
+  enableCommandDisposable.dispose();
+  disableCommandDisposable.dispose();
+}
 
 module.exports = {
   activate,

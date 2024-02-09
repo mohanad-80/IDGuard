@@ -23,7 +23,18 @@
   ],
   "main": "./extension.js",
   "contributes": {
-    "commands": []
+    "commands": [
+      {
+        "command": "extension.enable",
+        "title": "Enable extension",
+        "category": "IDGuard"
+      },
+      {
+        "command": "extension.disable",
+        "title": "Disable extension",
+        "category": "IDGuard"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
