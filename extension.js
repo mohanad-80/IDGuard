@@ -1,6 +1,13 @@
 const vscode = require("vscode");
 const HTMLParser = require("node-html-parser");
 
+let configuration = vscode.workspace.getConfiguration("IDGuard");
+
+let severity = configuration.get("changeSeverity");
+severity = vscode.DiagnosticSeverity[severity];
+
+let timeoutDuration = configuration.get("checkingTimeout", 1000);
+
 let isExtensionEnabled = true;
 let duplicatedIds = [];
 let timeout;
@@ -51,7 +58,7 @@ function monitorHTMLFile(e) {
               const diagnostic = new vscode.Diagnostic(
                 range,
                 `Duplicate ID detected: "${elementId}". Consider using unique IDs to avoid conflicts.`,
-                vscode.DiagnosticSeverity.Information // <=== choose the best severity
+                severity
               );
               diagnostics.push(diagnostic);
             }
@@ -63,7 +70,7 @@ function monitorHTMLFile(e) {
       diagnosticCollection.delete(e.document.uri);
       // Set the new diagnostics
       diagnosticCollection.set(e.document.uri, diagnostics);
-    }, 1000);
+    }, timeoutDuration);
   }
 }
 
